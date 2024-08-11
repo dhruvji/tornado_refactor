@@ -1,0 +1,1 @@
+Change HTTPServer's `initialize()` method to receive the `HTTP1ConnectionParameters` class as a parameter to make the list of parameters shorter.
