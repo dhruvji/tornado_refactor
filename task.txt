@@ -1,0 +1,1 @@
+Can you wrap out the parameters for TCPServer.listen() and TCPServer.bind() into a separate dataclass named TCPServerSocket?
