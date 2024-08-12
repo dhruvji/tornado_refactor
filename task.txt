@@ -1,0 +1,1 @@
+Rename the parent class's method tornado.testing.AsyncTestCase.tearDown() into lowercase.
