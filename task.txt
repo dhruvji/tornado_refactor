@@ -1,0 +1,55 @@
+IDEAS for tasks related to removing deprecated code from the codebase.
+1. Remove all code that is marked in the comments as being removed in version 7.0. (5 cases)
+2. Remove all deprecated classes/methods/paramaeters
+3. Remove the maint.scripts.test_resolvers scrip
+...
+
+
+Class:
+- tornado.auth.TwitterMixin  (will be removed)
+- tornado.netutil.DefaultExecutorResolver
+- tornado.netutil.BlockingResolver
+- tornado.netutil.ThreadedResolver
+- tornado.platform.asyncio.AnyThreadEventLoopPolicy
+- tornado.platform.caresresolver.CaresResolver (will be removed)
+- tornado.test.web_test.WebTestCase
+
+
+Methods:
+- tornado.gen.multi_future
+- tornado.gen.maybe_future
+- tornado.ioloop.IOLoop.instance
+- tornado.ioloop.IOLoop.install
+- tornado.ioloop.IOLoop.clear_instance
+- tornado.ioloop.IOLoop.current
+- tornado.ioloop.IOLoop.make_current
+- tornado.ioloop.IOLoop.clear_current
+- tornado.ioloop.IOLoop.add_callback_from_signal (will be removed)
+- tornado.tcpserver.TCPServer.bind
+- tornado.tcpserver.TCPServer.start
+- tornado.testing.AsyncTestCase.get_new_ioloop (will be removed)
+- tornado.testing.AsyncTestCase.stop
+- tornado.testing.AsyncTestCase.wait
+- tornado.testing.AsyncTestCase.fetch
+- tornado.web.RequestHandler.clear_all_cookies
+- tornado.platform.asyncio.to_tornado_future
+- tornado.platform.asyncio.to_asyncio_future
+- tornado.platform.twisted.install
+
+Variable/Type:
+- tornado.gen.moment
+- tornado.util.bytes_type
+
+Params:
+- tornado.auth.OAuth2Mixin.authorize_redirect->client_secret (will be removed)
+- tornado.httpclient.HTTPRequest.__init__->use_gzip
+- tornado.template.Template.__init__->compress_whitespace
+
+Really hard refactoring:
+- tornado.wsgi.WSGIContainer
+
+Should NOT be removed:
+- tornado.platform.asyncio
+
+Scripts:
+- maint.scripts.test_resolvers
