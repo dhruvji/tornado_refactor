@@ -1,7 +1,7 @@
 import socket
 import typing  # noqa(F401)
 
-from tornado.http1connection import HTTP1Connection
+from tornado.http1connection import HTTP1xConnection
 from tornado.httputil import HTTPMessageDelegate
 from tornado.iostream import IOStream
 from tornado.locks import Event
@@ -37,7 +37,7 @@ class HTTP1ConnectionTest(AsyncTestCase):
     def test_http10_no_content_length(self):
         # Regression test for a bug in which can_keep_alive would crash
         # for an HTTP/1.0 (not 1.1) response with no content-length.
-        conn = HTTP1Connection(self.client_stream, True)
+        conn = HTTP1xConnection(self.client_stream, True)
         self.server_stream.write(b"HTTP/1.0 200 Not Modified\r\n\r\nhello")
         self.server_stream.close()
 

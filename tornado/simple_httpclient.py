@@ -9,7 +9,7 @@ from tornado.httpclient import (
     HTTPRequest,
 )
 from tornado import httputil
-from tornado.http1connection import HTTP1Connection, HTTP1ConnectionParameters
+from tornado.http1connection import HTTP1xConnection, HTTP1ConnectionParameters
 from tornado.ioloop import IOLoop
 from tornado.iostream import StreamClosedError, IOStream
 from tornado.netutil import (
@@ -496,9 +496,9 @@ class _HTTPConnection(httputil.HTTPMessageDelegate):
             self.io_loop.remove_timeout(self._timeout)
             self._timeout = None
 
-    def _create_connection(self, stream: IOStream) -> HTTP1Connection:
+    def _create_connection(self, stream: IOStream) -> HTTP1xConnection:
         stream.set_nodelay(True)
-        connection = HTTP1Connection(
+        connection = HTTP1xConnection(
             stream,
             True,
             HTTP1ConnectionParameters(

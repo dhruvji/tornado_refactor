@@ -2362,7 +2362,7 @@ class StreamingRequestBodyTest(WebTestCase):
         stream.write(b"0\r\n\r\n")
         yield self.finished
         data = yield stream.read_until_close()
-        # This would ideally use an HTTP1Connection to read the response.
+        # This would ideally use an HTTP1xConnection to read the response.
         self.assertTrue(data.endswith(b"{}"))
         stream.close()
 

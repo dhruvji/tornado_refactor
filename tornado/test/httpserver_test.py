@@ -7,7 +7,7 @@ from tornado.escape import (
     recursive_unicode,
     native_str,
 )
-from tornado.http1connection import HTTP1Connection
+from tornado.http1connection import HTTP1xConnection
 from tornado.httpclient import HTTPError
 from tornado.httpserver import HTTPServer
 from tornado.httputil import (
@@ -68,7 +68,7 @@ async def read_stream_body(stream):
         def finish(self):
             conn.detach()  # type: ignore
 
-    conn = HTTP1Connection(stream, True)
+    conn = HTTP1xConnection(stream, True)
     delegate = Delegate()
     await conn.read_response(delegate)
     return delegate.start_line, delegate.headers, b"".join(chunks)
@@ -1326,7 +1326,7 @@ class BodyLimitsTest(AsyncHTTPTestCase):
                 self.bytes_read = 0
 
             def prepare(self):
-                conn = typing.cast(HTTP1Connection, self.request.connection)
+                conn = typing.cast(HTTP1xConnection, self.request.connection)
                 if "expected_size" in self.request.arguments:
                     conn.set_max_body_size(int(self.get_argument("expected_size")))
                 if "body_timeout" in self.request.arguments:

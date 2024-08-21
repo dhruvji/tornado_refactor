@@ -71,7 +71,7 @@ class _ExceptionLoggingContext:
 
 
 class HTTP1ConnectionParameters:
-    """Parameters for `.HTTP1Connection` and `.HTTP1ServerConnection`."""
+    """Parameters for `.HTTP1xConnection` and `.HTTP1ServerConnection`."""
 
     def __init__(
         self,
@@ -103,7 +103,7 @@ class HTTP1ConnectionParameters:
         self.decompress = decompress
 
 
-class HTTP1Connection(httputil.HTTPConnection):
+class HTTP1xConnection(httputil.HTTPConnection):
     """Implements the HTTP/1.x protocol.
 
     This class can be on its own for clients, or via `HTTP1ServerConnection`
@@ -813,7 +813,7 @@ class HTTP1ServerConnection:
     ) -> None:
         try:
             while True:
-                conn = HTTP1Connection(self.stream, False, self.params, self.context)
+                conn = HTTP1xConnection(self.stream, False, self.params, self.context)
                 request_delegate = delegate.start_request(self, conn)
                 try:
                     ret = await conn.read_response(request_delegate)
