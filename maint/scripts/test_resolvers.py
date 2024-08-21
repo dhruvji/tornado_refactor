@@ -13,7 +13,7 @@ import socket
 
 from tornado import gen
 from tornado.ioloop import IOLoop
-from tornado.netutil import Resolver, ThreadedResolver, DefaultExecutorResolver
+from tornado.resolver import Resolver, ThreadedResolver, DefaultExecutorResolver
 from tornado.options import parse_command_line, define, options
 
 try:

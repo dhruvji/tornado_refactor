@@ -12,13 +12,9 @@ from tornado import httputil
 from tornado.http1connection import HTTP1Connection, HTTP1ConnectionParameters
 from tornado.ioloop import IOLoop
 from tornado.iostream import StreamClosedError, IOStream
-from tornado.netutil import (
-    Resolver,
-    OverrideResolver,
-    _client_ssl_defaults,
-    is_valid_ip,
-)
+from tornado.netutil import _client_ssl_defaults, is_valid_ip
 from tornado.log import gen_log
+from tornado.resolver import Resolver, OverrideResolver
 from tornado.tcpclient import TCPClient
 
 import base64

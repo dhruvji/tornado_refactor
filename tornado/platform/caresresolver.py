@@ -4,7 +4,8 @@ import socket
 from tornado.concurrent import Future
 from tornado import gen
 from tornado.ioloop import IOLoop
-from tornado.netutil import Resolver, is_valid_ip
+from tornado.netutil import is_valid_ip
+from tornado.resolver import Resolver
 
 import typing
 

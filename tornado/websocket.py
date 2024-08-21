@@ -29,7 +29,7 @@ from tornado import gen, httpclient, httputil
 from tornado.ioloop import IOLoop, PeriodicCallback
 from tornado.iostream import StreamClosedError, IOStream
 from tornado.log import gen_log, app_log
-from tornado.netutil import Resolver
+from tornado.resolver import Resolver
 from tornado import simple_httpclient
 from tornado.queues import Queue
 from tornado.tcpclient import TCPClient

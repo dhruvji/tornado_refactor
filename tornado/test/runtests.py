@@ -11,7 +11,7 @@ import warnings
 
 from tornado.httpclient import AsyncHTTPClient
 from tornado.httpserver import HTTPServer
-from tornado.netutil import Resolver
+from tornado.resolver import Resolver
 from tornado.options import define, add_parse_callback, options
 from tornado.test.util import ABT_SKIP_MESSAGE
 

@@ -18,7 +18,8 @@ from tornado.ioloop import IOLoop
 from tornado.iostream import UnsatisfiableReadError
 from tornado.locks import Event
 from tornado.log import gen_log
-from tornado.netutil import Resolver, bind_sockets
+from tornado.netutil import bind_sockets
+from tornado.resolver import Resolver
 from tornado.simple_httpclient import (
     SimpleAsyncHTTPClient,
     HTTPStreamClosedError,

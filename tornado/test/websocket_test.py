@@ -11,7 +11,7 @@ from tornado import gen
 from tornado.httpclient import HTTPError, HTTPRequest
 from tornado.locks import Event
 from tornado.log import gen_log, app_log
-from tornado.netutil import Resolver
+from tornado.resolver import Resolver
 from tornado.simple_httpclient import SimpleAsyncHTTPClient
 from tornado.template import DictLoader
 from tornado.test.util import abstract_base_test
