@@ -102,7 +102,7 @@ class AsyncTestCase(unittest.TestCase):
 
     By default, a new `.IOLoop` is constructed for each test and is available
     as ``self.io_loop``.  If the code being tested requires a
-    reused global `.IOLoop`, subclasses should override `get_new_ioloop` to return it,
+    reused global `.IOLoop`, subclasses should override `getNewIoLoop` to return it,
     although this is deprecated as of Tornado 6.3.
 
     The `.IOLoop`'s ``start`` and ``stop`` methods should not be
@@ -156,9 +156,9 @@ class AsyncTestCase(unittest.TestCase):
                 module=r"tornado\..*",
             )
         super().setUp()
-        if type(self).get_new_ioloop is not AsyncTestCase.get_new_ioloop:
-            warnings.warn("get_new_ioloop is deprecated", DeprecationWarning)
-        self.io_loop = self.get_new_ioloop()
+        if type(self).getNewIoLoop is not AsyncTestCase.getNewIoLoop:
+            warnings.warn("getNewIoLoop is deprecated", DeprecationWarning)
+        self.io_loop = self.getNewIoLoop()
         asyncio.set_event_loop(self.io_loop.asyncio_loop)  # type: ignore[attr-defined]
 
     def tearDown(self) -> None:
@@ -205,7 +205,7 @@ class AsyncTestCase(unittest.TestCase):
         # unittest machinery understands.
         self.__rethrow()
 
-    def get_new_ioloop(self) -> IOLoop:
+    def getNewIoLoop(self) -> IOLoop:
         """Returns the `.IOLoop` to use for this test.
 
         By default, a new `.IOLoop` is created for each test.

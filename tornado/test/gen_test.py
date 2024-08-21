@@ -967,7 +967,7 @@ class RunnerGCTest(AsyncTestCase):
         # GitHub issue 2229: suspended coroutines should be GCed when
         # their loop is closed, even if they're involved in a reference
         # cycle.
-        loop = self.get_new_ioloop()
+        loop = self.getNewIoLoop()
         result = []  # type: List[Optional[bool]]
         wfut = []
 
@@ -1012,7 +1012,7 @@ class RunnerGCTest(AsyncTestCase):
                 # coroutine finalizer
                 result.append(None)
 
-        loop = self.get_new_ioloop()
+        loop = self.getNewIoLoop()
         result = []  # type: List[Optional[bool]]
         wfut = []
 
@@ -1043,7 +1043,7 @@ class RunnerGCTest(AsyncTestCase):
             result = yield gen.multi([gen.moment, gen.moment])
             raise gen.Return(result)
 
-        loop = self.get_new_ioloop()
+        loop = self.getNewIoLoop()
         result = loop.run_sync(wait_a_moment)
         self.assertEqual(result, [None, None])
 
