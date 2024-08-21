@@ -1,1 +1,3 @@
 Change HTTPServer's `initialize()` method to receive the `HTTP1ConnectionParameters` class as a parameter to make the list of parameters shorter.
+
+TOO HARD: HTTPServer.initialize() is not actually called directly, but is rather called from `tornado.util.Configurable.__new()__` to allow a unified scheme. Hence this refactor would potentially be affecting every single Configurable.
