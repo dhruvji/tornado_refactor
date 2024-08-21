@@ -1,1 +1,3 @@
 Rename the method tornado.testing.AsyncHTTPTestCase.setUp() to lowercase.
+
+BAD: Most methods here were from the `unittest` built-in.
