@@ -107,7 +107,7 @@ import os
 import textwrap
 
 from tornado.escape import _unicode, native_str
-from tornado.log import define_logging_options
+from tornado.global_log_options import define_logging_options
 from tornado.util import basestring_type, exec_in
 
 from typing import (

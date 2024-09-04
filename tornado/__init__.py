@@ -35,6 +35,7 @@ __all__ = [
     "curl_httpclient",
     "escape",
     "gen",
+    "global_log_options",
     "http1connection",
     "httpclient",
     "httpserver",

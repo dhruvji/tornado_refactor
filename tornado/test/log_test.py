@@ -24,7 +24,8 @@ import unittest
 import warnings
 
 from tornado.escape import utf8
-from tornado.log import LogFormatter, define_logging_options, enable_pretty_logging
+from tornado.global_log_options import define_logging_options, enable_pretty_logging
+from tornado.log import LogFormatter
 from tornado.options import OptionParser
 from tornado.util import basestring_type
 
