@@ -1,1 +1,1 @@
-Move the functions in tornado/log.py to a log_utils.py
+Move the options related functions in tornado/log.py, `enable_pretty_logging()` and `define_logging_options()`, to a global_log_options.py
