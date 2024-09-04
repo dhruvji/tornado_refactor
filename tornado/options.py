@@ -100,6 +100,8 @@ instances to define isolated sets of options, such as for subcommands.
 """
 
 import datetime
+import logging
+import logging.handlers
 import numbers
 import re
 import sys
@@ -107,7 +109,7 @@ import os
 import textwrap
 
 from tornado.escape import _unicode, native_str
-from tornado.log import define_logging_options
+from tornado.log import define_logging_options, LogFormatter
 from tornado.util import basestring_type, exec_in
 
 from typing import (
@@ -492,6 +494,52 @@ class OptionParser:
                 assert options.name == value
         """
         return _Mockable(self)
+
+    def enable_pretty_logging(
+        self, logger: Optional[logging.Logger] = None
+    ) -> None:
+        """Turns on formatted logging output as configured.
+
+        This is called automatically by `tornado.options.parse_command_line`
+        and `tornado.options.parse_config_file`.
+        """
+        if self.logging is None or self.logging.lower() == "none":
+            return
+        if logger is None:
+            logger = logging.getLogger()
+        logger.setLevel(getattr(logging, self.logging.upper()))
+        if self.log_file_prefix:
+            rotate_mode = self.log_rotate_mode
+            if rotate_mode == "size":
+                channel = logging.handlers.RotatingFileHandler(
+                    filename=self.log_file_prefix,
+                    maxBytes=self.log_file_max_size,
+                    backupCount=self.log_file_num_backups,
+                    encoding="utf-8",
+                )  # type: logging.Handler
+            elif rotate_mode == "time":
+                channel = logging.handlers.TimedRotatingFileHandler(
+                    filename=self.log_file_prefix,
+                    when=self.log_rotate_when,
+                    interval=self.log_rotate_interval,
+                    backupCount=self.log_file_num_backups,
+                    encoding="utf-8",
+                )
+            else:
+                error_message = (
+                    "The value of log_rotate_mode option should be "
+                    + '"size" or "time", not "%s".' % rotate_mode
+                )
+                raise ValueError(error_message)
+            channel.setFormatter(LogFormatter(color=False))
+            logger.addHandler(channel)
+
+        if options.log_to_stderr or (options.log_to_stderr is None and not logger.handlers):
+            # Set up color if we are in a tty and curses is installed
+            channel = logging.StreamHandler()
+            channel.setFormatter(LogFormatter())
+            logger.addHandler(channel)
+
 
 
 class _Mockable:

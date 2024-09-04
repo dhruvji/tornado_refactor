@@ -25,7 +25,7 @@ import warnings
 
 from tornado.escape import utf8
 from tornado.log import LogFormatter, define_logging_options, enable_pretty_logging
-from tornado.options import OptionParser
+from tornado.options import OptionParser, options
 from tornado.util import basestring_type
 
 
@@ -129,7 +129,7 @@ class EnablePrettyLoggingTest(unittest.TestCase):
         tmpdir = tempfile.mkdtemp()
         try:
             self.options.log_file_prefix = tmpdir + "/test_log"
-            enable_pretty_logging(options=self.options, logger=self.logger)
+            self.options.enable_pretty_logging(logger=self.logger)
             self.assertEqual(1, len(self.logger.handlers))
             self.logger.error("hello")
             self.logger.handlers[0].flush()
@@ -150,7 +150,7 @@ class EnablePrettyLoggingTest(unittest.TestCase):
         try:
             self.options.log_file_prefix = tmpdir + "/test_log"
             self.options.log_rotate_mode = "time"
-            enable_pretty_logging(options=self.options, logger=self.logger)
+            self.options.enable_pretty_logging(logger=self.logger)
             self.logger.error("hello")
             self.logger.handlers[0].flush()
             filenames = glob.glob(tmpdir + "/test_log*")
@@ -171,8 +171,7 @@ class EnablePrettyLoggingTest(unittest.TestCase):
             self.options.log_rotate_mode = "wrong_mode"
             self.assertRaises(
                 ValueError,
-                enable_pretty_logging,
-                options=self.options,
+                self.options.enable_pretty_logging,
                 logger=self.logger,
             )
         finally:
