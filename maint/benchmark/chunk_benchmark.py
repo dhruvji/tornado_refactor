@@ -6,7 +6,7 @@ import logging
 from tornado.curl_httpclient import CurlAsyncHTTPClient
 from tornado.simple_httpclient import SimpleAsyncHTTPClient
 from tornado.ioloop import IOLoop
-from tornado.options import define, options, parse_command_line
+from tornado.global_options import define, options, parse_command_line
 from tornado.web import RequestHandler, Application
 
 try:

@@ -5,7 +5,7 @@ import logging
 from tornado import gen
 from tornado.iostream import StreamClosedError
 from tornado.tcpserver import TCPServer
-from tornado.options import options, define
+from tornado.global_options import options, define
 
 define("port", default=9888, help="TCP port to listen on")
 logger = logging.getLogger(__name__)

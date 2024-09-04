@@ -14,7 +14,7 @@
 # % sort time
 # % stats 20
 
-from tornado.options import define, options, parse_command_line
+from tornado.global_options import define, options, parse_command_line
 from tornado.web import RequestHandler, Application
 
 import asyncio

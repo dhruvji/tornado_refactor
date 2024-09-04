@@ -755,7 +755,7 @@ class _RequestProxy:
 
 
 def main() -> None:
-    from tornado.options import define, options, parse_command_line
+    from tornado.global_options import define, options, parse_command_line
 
     define("print_headers", type=bool, default=False)
     define("print_body", type=bool, default=True)

@@ -24,7 +24,8 @@ import re
 import tornado
 import unicodedata
 
-from tornado.options import define, options
+from tornado.global_options import define, options
+import tornado.global_options
 
 define("port", default=8888, help="run on the given port", type=int)
 define("db_host", default="127.0.0.1", help="blog database host")
@@ -287,7 +288,7 @@ class EntryModule(tornado.web.UIModule):
 
 
 async def main():
-    tornado.options.parse_command_line()
+    tornado.global_options.parse_command_line()
 
     # Create the global connection pool.
     async with aiopg.create_pool(

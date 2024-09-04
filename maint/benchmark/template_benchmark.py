@@ -6,7 +6,7 @@
 import sys
 from timeit import Timer
 
-from tornado.options import options, define, parse_command_line
+from tornado.global_options import options, define, parse_command_line
 from tornado.template import Template
 
 define('num', default=100, help='number of iterations')

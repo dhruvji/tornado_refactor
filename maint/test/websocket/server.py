@@ -1,5 +1,5 @@
 from tornado.ioloop import IOLoop
-from tornado.options import define, options, parse_command_line
+from tornado.global_options import define, options, parse_command_line
 from tornado.websocket import WebSocketHandler
 from tornado.web import Application
 

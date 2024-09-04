@@ -18,7 +18,7 @@ from urllib.parse import quote
 from uuid import uuid4
 
 from tornado import gen, httpclient
-from tornado.options import define, options
+from tornado.global_options import define, options
 
 
 # Using HTTP POST, upload one or more files in a single multipart-form-encoded

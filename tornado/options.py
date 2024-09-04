@@ -107,7 +107,6 @@ import os
 import textwrap
 
 from tornado.escape import _unicode, native_str
-from tornado.log import define_logging_options
 from tornado.util import basestring_type, exec_in
 
 from typing import (
@@ -672,74 +671,3 @@ class _Option:
 
     def _parse_string(self, value: str) -> str:
         return _unicode(value)
-
-
-options = OptionParser()
-"""Global options object.
-
-All defined options are available as attributes on this object.
-"""
-
-
-def define(
-    name: str,
-    default: Any = None,
-    type: Optional[type] = None,
-    help: Optional[str] = None,
-    metavar: Optional[str] = None,
-    multiple: bool = False,
-    group: Optional[str] = None,
-    callback: Optional[Callable[[Any], None]] = None,
-) -> None:
-    """Defines an option in the global namespace.
-
-    See `OptionParser.define`.
-    """
-    return options.define(
-        name,
-        default=default,
-        type=type,
-        help=help,
-        metavar=metavar,
-        multiple=multiple,
-        group=group,
-        callback=callback,
-    )
-
-
-def parse_command_line(
-    args: Optional[List[str]] = None, final: bool = True
-) -> List[str]:
-    """Parses global options from the command line.
-
-    See `OptionParser.parse_command_line`.
-    """
-    return options.parse_command_line(args, final=final)
-
-
-def parse_config_file(path: str, final: bool = True) -> None:
-    """Parses global options from a config file.
-
-    See `OptionParser.parse_config_file`.
-    """
-    return options.parse_config_file(path, final=final)
-
-
-def print_help(file: Optional[TextIO] = None) -> None:
-    """Prints all the command line options to stderr (or another file).
-
-    See `OptionParser.print_help`.
-    """
-    return options.print_help(file)
-
-
-def add_parse_callback(callback: Callable[[], None]) -> None:
-    """Adds a parse callback, to be invoked when option parsing is done.
-
-    See `OptionParser.add_parse_callback`
-    """
-    options.add_parse_callback(callback)
-
-
-# Default options
-define_logging_options(options)

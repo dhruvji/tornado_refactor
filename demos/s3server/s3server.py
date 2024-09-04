@@ -42,7 +42,7 @@ from tornado import escape
 from tornado import httpserver
 from tornado import web
 from tornado.util import unicode_type
-from tornado.options import options, define
+from tornado.global_options import options, define
 
 try:
     long

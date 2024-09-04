@@ -14,7 +14,7 @@ import socket
 from tornado import gen
 from tornado.ioloop import IOLoop
 from tornado.netutil import Resolver, ThreadedResolver, DefaultExecutorResolver
-from tornado.options import parse_command_line, define, options
+from tornado.global_options import define, options, parse_command_line
 
 try:
     import pycares

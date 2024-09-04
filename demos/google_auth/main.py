@@ -16,7 +16,7 @@ import json
 import tornado
 import urllib.parse
 
-from tornado.options import define, options
+from tornado.global_options import define, options
 from tornado.web import url
 
 define("port", default=8888, help="run on the given port", type=int)
@@ -25,7 +25,7 @@ define("google_oauth_secret", help="Google OAuth Secret")
 define(
     "config_file",
     help="tornado config file",
-    callback=lambda path: tornado.options.parse_config_file(path, final=False),
+    callback=lambda path: tornado.global_options.parse_config_file(path, final=False),
 )
 
 
@@ -90,7 +90,7 @@ class LogoutHandler(BaseHandler):
 
 
 async def main():
-    tornado.options.parse_command_line()
+    tornado.global_options.parse_command_line()
     app = tornado.web.Application(
         [
             url(r"/", IndexHandler),

@@ -5,7 +5,7 @@ from enum import Enum
 from typing import Callable
 
 from tornado.httputil import HTTPHeaders
-from tornado.options import define, options, parse_command_line
+from tornado.global_options import define, options, parse_command_line
 
 
 define("benchmark", type=str)

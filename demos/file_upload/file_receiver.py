@@ -13,7 +13,7 @@ import logging
 from urllib.parse import unquote
 
 import tornado
-from tornado import options
+from tornado import global_options
 
 
 class POSTHandler(tornado.web.RequestHandler):
@@ -49,7 +49,7 @@ def make_app():
 
 
 async def main():
-    options.parse_command_line()
+    global_options.parse_command_line()
     app = make_app()
     app.listen(8888)
     await asyncio.Event().wait()

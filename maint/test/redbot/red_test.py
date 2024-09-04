@@ -6,7 +6,7 @@ import redbot.speak as rs
 import thor
 import threading
 from tornado import gen
-from tornado.options import parse_command_line
+from tornado.global_options import parse_command_line
 from tornado.testing import AsyncHTTPTestCase
 from tornado.web import RequestHandler, Application, asynchronous
 import unittest

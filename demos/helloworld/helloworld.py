@@ -17,7 +17,7 @@
 import asyncio
 import tornado
 
-from tornado.options import define, options
+from tornado.global_options import define, options
 
 define("port", default=8888, help="run on the given port", type=int)
 
@@ -28,7 +28,7 @@ class MainHandler(tornado.web.RequestHandler):
 
 
 async def main():
-    tornado.options.parse_command_line()
+    tornado.global_options.parse_command_line()
     application = tornado.web.Application([(r"/", MainHandler)])
     http_server = tornado.httpserver.HTTPServer(application)
     http_server.listen(options.port)

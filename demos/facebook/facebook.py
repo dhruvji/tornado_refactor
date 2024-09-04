@@ -18,7 +18,8 @@ import asyncio
 import os.path
 import tornado
 
-from tornado.options import define, options
+from tornado.global_options import define, options
+import tornado.global_options
 
 define("port", default=8888, help="run on the given port", type=int)
 define("facebook_api_key", help="your Facebook application API key", type=str)
@@ -106,7 +107,7 @@ class PostModule(tornado.web.UIModule):
 
 
 async def main():
-    tornado.options.parse_command_line()
+    tornado.global_options.parse_command_line()
     if not (options.facebook_api_key and options.facebook_secret):
         print("--facebook_api_key and --facebook_secret must be set")
         return

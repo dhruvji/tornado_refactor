@@ -9,6 +9,7 @@ from . import concurrent
 from . import curl_httpclient
 from . import escape
 from . import gen
+from . import global_options
 from . import http1connection
 from . import httpclient
 from . import httpserver

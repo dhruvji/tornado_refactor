@@ -24,7 +24,7 @@ import tornado
 import os.path
 import uuid
 
-from tornado.options import define, options
+from tornado.global_options import define, options
 
 define("port", default=8888, help="run on the given port", type=int)
 
@@ -89,7 +89,7 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
 
 
 async def main():
-    tornado.options.parse_command_line()
+    tornado.global_options.parse_command_line()
     app = Application()
     app.listen(options.port)
     await asyncio.Event().wait()

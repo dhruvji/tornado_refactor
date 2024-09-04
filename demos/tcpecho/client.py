@@ -2,7 +2,7 @@
 
 import asyncio
 from tornado.tcpclient import TCPClient
-from tornado.options import options, define
+from tornado.global_options import options, define
 
 define("host", default="localhost", help="TCP server host")
 define("port", default=9888, help="TCP port to connect to")

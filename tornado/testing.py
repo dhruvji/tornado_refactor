@@ -810,7 +810,7 @@ def main(**kwargs: Any) -> None:
        by the `unittest` module (previously it would add a PASS or FAIL
        log message).
     """
-    from tornado.options import define, options, parse_command_line
+    from tornado.global_options import define, options, parse_command_line
 
     define(
         "exception_on_interrupt",
