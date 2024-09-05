@@ -2,6 +2,7 @@
 
 import asyncio
 from tornado.tcpclient import TCPClient
+from tornado.tcpclientconfig import TCPClientConfig
 from tornado.options import options, define
 
 define("host", default="localhost", help="TCP server host")
@@ -10,7 +11,7 @@ define("message", default="ping", help="Message to send")
 
 
 async def send_message():
-    stream = await TCPClient().connect(options.host, options.port)
+    stream = await TCPClient().connect(TCPClientConfig(options.host, options.port))
     await stream.write((options.message + "\n").encode())
     print("Sent to server:", options.message)
     reply = await stream.read_until(b"\n")

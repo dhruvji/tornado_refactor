@@ -20,6 +20,7 @@ from tornado.netutil import (
 )
 from tornado.log import gen_log
 from tornado.tcpclient import TCPClient
+from tornado.tcpclientconfig import TCPClientConfig
 
 import base64
 import collections
@@ -336,12 +337,14 @@ class _HTTPConnection(httputil.HTTPMessageDelegate):
                     functools.partial(self._on_timeout, "while connecting"),
                 )
             stream = await self.tcp_client.connect(
-                host,
-                port,
-                af=af,
-                ssl_options=ssl_options,
-                max_buffer_size=self.max_buffer_size,
-                source_ip=source_ip,
+                TCPClientConfig(
+                    host,
+                    port,
+                    af=af,
+                    ssl_options=ssl_options,
+                    max_buffer_size=self.max_buffer_size,
+                    source_ip=source_ip,
+                )
             )
 
             if self.final_callback is None:

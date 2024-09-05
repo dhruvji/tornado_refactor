@@ -20,7 +20,6 @@ import functools
 import socket
 import numbers
 import datetime
-import ssl
 import typing
 
 from tornado.concurrent import Future, future_add_done_callback
@@ -29,6 +28,7 @@ from tornado.iostream import IOStream
 from tornado import gen
 from tornado.netutil import Resolver
 from tornado.gen import TimeoutError
+from tornado.tcpclientconfig import TCPClientConfig
 
 from typing import Any, Union, Dict, Tuple, List, Callable, Iterator, Optional
 
@@ -220,14 +220,7 @@ class TCPClient:
 
     async def connect(
         self,
-        host: str,
-        port: int,
-        af: socket.AddressFamily = socket.AF_UNSPEC,
-        ssl_options: Optional[Union[Dict[str, Any], ssl.SSLContext]] = None,
-        max_buffer_size: Optional[int] = None,
-        source_ip: Optional[str] = None,
-        source_port: Optional[int] = None,
-        timeout: Optional[Union[float, datetime.timedelta]] = None,
+        config: TCPClientConfig,
     ) -> IOStream:
         """Connect to the given host and port.
 
@@ -263,34 +256,34 @@ class TCPClient:
                 raise TypeError("Unsupported timeout %r" % timeout)
         if timeout is not None:
             addrinfo = await gen.with_timeout(
-                timeout, self.resolver.resolve(host, port, af)
+                timeout, self.resolver.resolve(config.host, config.port, af)
             )
         else:
-            addrinfo = await self.resolver.resolve(host, port, af)
+            addrinfo = await self.resolver.resolve(config.host, config.port, af)
         connector = _Connector(
             addrinfo,
             functools.partial(
                 self._create_stream,
-                max_buffer_size,
-                source_ip=source_ip,
-                source_port=source_port,
+                config.max_buffer_size,
+                source_ip=config.source_ip,
+                source_port=config.source_port,
             ),
         )
         af, addr, stream = await connector.start(connect_timeout=timeout)
         # TODO: For better performance we could cache the (af, addr)
         # information here and re-use it on subsequent connections to
         # the same host. (http://tools.ietf.org/html/rfc6555#section-4.2)
-        if ssl_options is not None:
+        if config.ssl_options is not None:
             if timeout is not None:
                 stream = await gen.with_timeout(
                     timeout,
                     stream.start_tls(
-                        False, ssl_options=ssl_options, server_hostname=host
+                        False, ssl_options=config.ssl_options, server_hostname=config.host
                     ),
                 )
             else:
                 stream = await stream.start_tls(
-                    False, ssl_options=ssl_options, server_hostname=host
+                    False, ssl_options=config.ssl_options, server_hostname=config.host
                 )
         return stream
 

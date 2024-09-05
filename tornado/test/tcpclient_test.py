@@ -21,6 +21,7 @@ from tornado.concurrent import Future
 from tornado.netutil import bind_sockets, Resolver
 from tornado.queues import Queue
 from tornado.tcpclient import TCPClient, _Connector
+from tornado.tcpclientconfig import TCPClientConfig
 from tornado.tcpserver import TCPServer
 from tornado.testing import AsyncTestCase, gen_test
 from tornado.test.util import skipIfNoIPv6, refusing_port, skipIfNonUnix
@@ -88,11 +89,13 @@ class TCPClientTest(AsyncTestCase):
     def do_test_connect(self, family, host, source_ip=None, source_port=None):
         port = self.start_server(family)
         stream = yield self.client.connect(
-            host,
-            port,
-            source_ip=source_ip,
-            source_port=source_port,
-            af=family,
+            TCPClientConfig(
+                host,
+                port,
+                source_ip=source_ip,
+                source_port=source_port,
+                af=family,
+            )
         )
         assert self.server is not None
         server_stream = yield self.server.queue.get()
@@ -133,7 +136,7 @@ class TCPClientTest(AsyncTestCase):
         cleanup_func, port = refusing_port()
         self.addCleanup(cleanup_func)
         with self.assertRaises(IOError):
-            yield self.client.connect("127.0.0.1", port)
+            yield self.client.connect(TCPClientConfig("127.0.0.1", port))
 
     def test_source_ip_fail(self):
         """Fail when trying to use the source IP Address '8.8.8.8'."""
@@ -174,7 +177,7 @@ class TCPClientTest(AsyncTestCase):
 
         with self.assertRaises(TimeoutError):
             yield TCPClient(resolver=TimeoutResolver()).connect(
-                "1.2.3.4", 12345, timeout=timeout
+                TCPClientConfig("1.2.3.4", 12345, timeout=timeout)
             )
 
 
