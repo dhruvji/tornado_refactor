@@ -1,7 +1,1 @@
-Find all the objects that are supposed to be referenced globally and move them all into a `_globals.py`.
-- tornado.concurrent.dummy_executor
-- tornado.curl_httpclient.curl_log
-- tornado.log.access_log
-- tornado.log.app_log
-- tornado.log.gen_log
-- tornado.options.option
+tornado.concurrent.dummy_executor is supposed to be referenced globally. Move it into a `_globals.py`.
