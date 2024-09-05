@@ -24,7 +24,8 @@ import socket
 import ssl
 import stat
 
-from tornado.concurrent import dummy_executor, run_on_executor
+from tornado._globals import dummy_executor
+from tornado.concurrent import run_on_executor
 from tornado.ioloop import IOLoop
 from tornado.util import Configurable, errno_from_exception
 

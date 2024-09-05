@@ -75,9 +75,6 @@ class DummyExecutor(futures.Executor):
             pass
 
 
-dummy_executor = DummyExecutor()
-
-
 def run_on_executor(*args: Any, **kwargs: Any) -> Callable:
     """Decorator to run a synchronous method asynchronously on an executor.
 

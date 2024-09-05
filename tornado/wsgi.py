@@ -32,7 +32,7 @@ from io import BytesIO
 import tornado
 import sys
 
-from tornado.concurrent import dummy_executor
+from tornado._globals import dummy_executor
 from tornado import escape
 from tornado import httputil
 from tornado.ioloop import IOLoop
