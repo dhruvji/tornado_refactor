@@ -23,6 +23,7 @@ import ssl
 import stat
 
 from tornado.ioloop import IOLoop
+from tornado.resolver import Resolver, ThreadedResolver
 from tornado.util import errno_from_exception
 
 from typing import List, Callable, Any, Dict, Union, Optional
@@ -394,3 +395,7 @@ def ssl_wrap_socket(
     return context.wrap_socket(
         socket, server_hostname=server_hostname, server_side=server_side, **kwargs
     )
+
+# Maintain backwards compatibility for old references
+# Users should update their imports to tornado.resolver
+__all__ = ['Resolver', 'ThreadedResolver']

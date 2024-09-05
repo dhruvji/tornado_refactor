@@ -6,5 +6,6 @@ Asynchronous networking
    ioloop
    iostream
    netutil
+   resolver
    tcpclient
    tcpserver

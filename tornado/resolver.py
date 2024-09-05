@@ -28,24 +28,24 @@ class Resolver(Configurable):
     chosen with the `Resolver.configure <.Configurable.configure>`
     class method::
 
-        Resolver.configure('tornado.netutil.ThreadedResolver')
+        Resolver.configure('tornado.resolver.ThreadedResolver')
 
     The implementations of this interface included with Tornado are
 
-    * `tornado.netutil.DefaultLoopResolver`
-    * `tornado.netutil.DefaultExecutorResolver` (deprecated)
-    * `tornado.netutil.BlockingResolver` (deprecated)
-    * `tornado.netutil.ThreadedResolver` (deprecated)
-    * `tornado.netutil.OverrideResolver`
+    * `tornado.resolver.DefaultLoopResolver`
+    * `tornado.resolver.DefaultExecutorResolver` (deprecated)
+    * `tornado.resolver.BlockingResolver` (deprecated)
+    * `tornado.resolver.ThreadedResolver` (deprecated)
+    * `tornado.resolver.OverrideResolver`
     * `tornado.platform.caresresolver.CaresResolver` (deprecated)
 
     .. versionchanged:: 5.0
-       The default implementation has changed from `BlockingResolver` to
-       `DefaultExecutorResolver`.
+       The default implementation has changed from `tornado.resolver.BlockingResolver` to
+       `tornado.resolver.DefaultExecutorResolver`.
 
     .. versionchanged:: 6.2
-       The default implementation has changed from `DefaultExecutorResolver` to
-       `DefaultLoopResolver`.
+       The default implementation has changed from `tornado.resolver.DefaultExecutorResolver` to
+       `tornado.resolver.DefaultLoopResolver`.
     """
 
     @classmethod

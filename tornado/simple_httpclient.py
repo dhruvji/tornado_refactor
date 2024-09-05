@@ -96,7 +96,7 @@ class SimpleAsyncHTTPClient(AsyncHTTPClient):
     ``hostname_mapping`` is a dictionary mapping hostnames to IP addresses.
     It can be used to make local DNS changes when modifying system-wide
     settings like ``/etc/hosts`` is not possible or desirable (e.g. in
-    unittests). ``resolver`` is similar, but using the `.Resolver` interface
+    unittests). ``resolver`` is similar, but using the `.resolver.Resolver` interface
     instead of a simple mapping.
 
     ``max_buffer_size`` (default 100MB) is the number of bytes
