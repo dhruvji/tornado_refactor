@@ -19,6 +19,7 @@ import os.path
 import tornado
 
 from tornado.options import define, options
+from tornado.tcpserverconfig import TCPServerConfig
 
 define("port", default=8888, help="run on the given port", type=int)
 define("facebook_api_key", help="your Facebook application API key", type=str)
@@ -111,7 +112,7 @@ async def main():
         print("--facebook_api_key and --facebook_secret must be set")
         return
     http_server = tornado.httpserver.HTTPServer(Application())
-    http_server.listen(options.port)
+    http_server.listen(TCPServerConfig(options.port))
     await asyncio.Event().wait()
 
 

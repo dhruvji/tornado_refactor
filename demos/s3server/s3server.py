@@ -41,6 +41,7 @@ import urllib
 from tornado import escape
 from tornado import httpserver
 from tornado import web
+from tornado.tcpserverconfig import TCPServerConfig
 from tornado.util import unicode_type
 from tornado.options import options, define
 
@@ -58,7 +59,7 @@ async def start(port, root_directory, bucket_depth):
     """Starts the mock S3 server on the given port at the given path."""
     application = S3Application(root_directory, bucket_depth)
     http_server = httpserver.HTTPServer(application)
-    http_server.listen(port)
+    http_server.listen(TCPServerConfig(port))
     await asyncio.Event().wait()
 
 

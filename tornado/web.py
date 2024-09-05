@@ -102,6 +102,7 @@ from tornado.routing import (
     URLSpec,
     _RuleList,
 )
+from tornado.tcpserverconfig import TCPServerConfig
 from tornado.util import ObjectDict, unicode_type, _websocket_mask
 
 url = URLSpec
@@ -2253,12 +2254,14 @@ class Application(ReversibleRouter):
         """
         server = HTTPServer(self, **kwargs)
         server.listen(
-            port,
-            address=address,
-            family=family,
-            backlog=backlog,
-            flags=flags,
-            reuse_port=reuse_port,
+            TCPServerConfig(
+                port,
+                address=address,
+                family=family,
+                backlog=backlog,
+                flags=flags,
+                reuse_port=reuse_port,
+            )
         )
         return server
 

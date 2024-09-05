@@ -31,6 +31,7 @@ from tornado.netutil import (
     _DEFAULT_BACKLOG,
 )
 from tornado import process
+from tornado.tcpserverconfig import TCPServerConfig
 from tornado.util import errno_from_exception
 
 import typing
@@ -158,12 +159,7 @@ class TCPServer:
 
     def listen(
         self,
-        port: int,
-        address: Optional[str] = None,
-        family: socket.AddressFamily = socket.AF_UNSPEC,
-        backlog: int = _DEFAULT_BACKLOG,
-        flags: Optional[int] = None,
-        reuse_port: bool = False,
+        config: TCPServerConfig,
     ) -> None:
         """Starts accepting connections on the given port.
 
@@ -181,12 +177,12 @@ class TCPServer:
            arguments to match `tornado.netutil.bind_sockets`.
         """
         sockets = bind_sockets(
-            port,
-            address=address,
-            family=family,
-            backlog=backlog,
-            flags=flags,
-            reuse_port=reuse_port,
+            config.port,
+            address=config.address,
+            family=config.family,
+            backlog=config.backlog,
+            flags=config.flags,
+            reuse_port=config.reuse_port,
         )
         self.add_sockets(sockets)
 
@@ -211,12 +207,7 @@ class TCPServer:
 
     def bind(
         self,
-        port: int,
-        address: Optional[str] = None,
-        family: socket.AddressFamily = socket.AF_UNSPEC,
-        backlog: int = _DEFAULT_BACKLOG,
-        flags: Optional[int] = None,
-        reuse_port: bool = False,
+        config: TCPServerConfig,
     ) -> None:
         """Binds this server to the given port on the given address.
 
@@ -249,12 +240,12 @@ class TCPServer:
            and ``start()``.
         """
         sockets = bind_sockets(
-            port,
-            address=address,
-            family=family,
-            backlog=backlog,
-            flags=flags,
-            reuse_port=reuse_port,
+            config.port,
+            address=config.address,
+            family=config.family,
+            backlog=config.backlog,
+            flags=config.flags,
+            reuse_port=config.reuse_port,
         )
         if self._started:
             self.add_sockets(sockets)
