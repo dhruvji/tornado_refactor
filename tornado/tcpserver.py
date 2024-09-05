@@ -28,10 +28,9 @@ from tornado.netutil import (
     bind_sockets,
     add_accept_handler,
     ssl_wrap_socket,
-    _DEFAULT_BACKLOG,
 )
 from tornado import process
-from tornado.tcpserverconfig import TCPServerConfig
+from tornado.tcpserversocket import TCPServerSocket
 from tornado.util import errno_from_exception
 
 import typing
@@ -159,7 +158,7 @@ class TCPServer:
 
     def listen(
         self,
-        config: TCPServerConfig,
+        config: TCPServerSocket,
     ) -> None:
         """Starts accepting connections on the given port.
 
@@ -207,7 +206,7 @@ class TCPServer:
 
     def bind(
         self,
-        config: TCPServerConfig,
+        config: TCPServerSocket,
     ) -> None:
         """Binds this server to the given port on the given address.
 

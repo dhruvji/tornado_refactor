@@ -6,7 +6,7 @@ from tornado import gen
 from tornado.iostream import StreamClosedError
 from tornado.tcpserver import TCPServer
 from tornado.options import options, define
-from tornado.tcpserverconfig import TCPServerConfig
+from tornado.tcpserversocket import TCPServerSocket
 
 define("port", default=9888, help="TCP port to listen on")
 logger = logging.getLogger(__name__)
@@ -33,7 +33,7 @@ async def main():
     options.parse_command_line()
     logger.info("Listening on TCP port %d", options.port)
     server = EchoServer()
-    server.listen(TCPServerConfig(options.port))
+    server.listen(TCPServerSocket(options.port))
     await asyncio.Event().wait()
 
 

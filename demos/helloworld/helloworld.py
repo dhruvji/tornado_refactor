@@ -18,7 +18,7 @@ import asyncio
 import tornado
 
 from tornado.options import define, options
-from tornado.tcpserverconfig import TCPServerConfig
+from tornado.tcpserversocket import TCPServerSocket
 
 define("port", default=8888, help="run on the given port", type=int)
 
@@ -32,7 +32,7 @@ async def main():
     tornado.options.parse_command_line()
     application = tornado.web.Application([(r"/", MainHandler)])
     http_server = tornado.httpserver.HTTPServer(application)
-    http_server.listen(TCPServerConfig(options.port))
+    http_server.listen(TCPServerSocket(options.port))
     await asyncio.Event().wait()
 
 

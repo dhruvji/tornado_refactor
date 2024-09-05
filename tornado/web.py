@@ -102,7 +102,7 @@ from tornado.routing import (
     URLSpec,
     _RuleList,
 )
-from tornado.tcpserverconfig import TCPServerConfig
+from tornado.tcpserversocket import TCPServerSocket
 from tornado.util import ObjectDict, unicode_type, _websocket_mask
 
 url = URLSpec
@@ -2254,7 +2254,7 @@ class Application(ReversibleRouter):
         """
         server = HTTPServer(self, **kwargs)
         server.listen(
-            TCPServerConfig(
+            TCPServerSocket(
                 port,
                 address=address,
                 family=family,

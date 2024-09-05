@@ -5,7 +5,7 @@ import socket
 from tornado.netutil import _DEFAULT_BACKLOG
 
 @dataclass
-class TCPServerConfig:
+class TCPServerSocket:
     port: int
     address: Optional[str] = None
     family: socket.AddressFamily = socket.AF_UNSPEC
