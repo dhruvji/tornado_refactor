@@ -24,7 +24,7 @@ import warnings
 import zlib
 
 from tornado.concurrent import Future, future_set_result_unless_cancelled
-from tornado.escape import utf8, native_str, to_unicode
+from tornado.escape import to_utf8, native_str, to_unicode
 from tornado import gen, httpclient, httputil
 from tornado.ioloop import IOLoop, PeriodicCallback
 from tornado.iostream import StreamClosedError, IOStream
@@ -432,7 +432,7 @@ class WebSocketHandler(tornado.web.RequestHandler):
            The data argument is now optional.
 
         """
-        data = utf8(data)
+        data = to_utf8(data)
         if self.ws_connection is None or self.ws_connection.is_closing():
             raise WebSocketClosedError()
         self.ws_connection.write_ping(data)
@@ -882,7 +882,7 @@ class WebSocketProtocol13(WebSocketProtocol):
         given the value for Sec-WebSocket-Key.
         """
         sha1 = hashlib.sha1()
-        sha1.update(utf8(key))
+        sha1.update(to_utf8(key))
         sha1.update(b"258EAFA5-E914-47DA-95CA-C5AB0DC85B11")  # Magic value
         return native_str(base64.b64encode(sha1.digest()))
 
@@ -1061,7 +1061,7 @@ class WebSocketProtocol13(WebSocketProtocol):
             opcode = 0x1
         if isinstance(message, dict):
             message = tornado.escape.json_encode(message)
-        message = tornado.escape.utf8(message)
+        message = tornado.escape.to_utf8(message)
         assert isinstance(message, bytes)
         self._message_bytes_out += len(message)
         flags = 0
@@ -1249,7 +1249,7 @@ class WebSocketProtocol13(WebSocketProtocol):
                 else:
                     close_data = struct.pack(">H", code)
                 if reason is not None:
-                    close_data += utf8(reason)
+                    close_data += to_utf8(reason)
                 try:
                     self._write_frame(True, 0x8, close_data)
                 except StreamClosedError:
@@ -1546,7 +1546,7 @@ class WebSocketClientConnection(simple_httpclient._HTTPConnection):
         .. versionadded:: 5.1
 
         """
-        data = utf8(data)
+        data = to_utf8(data)
         if self.protocol is None:
             raise WebSocketClosedError()
         self.protocol.write_ping(data)

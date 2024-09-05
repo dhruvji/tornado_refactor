@@ -33,7 +33,7 @@ import time
 import unicodedata
 from urllib.parse import urlencode, urlparse, urlunparse, parse_qsl
 
-from tornado.escape import native_str, parse_qs_bytes, utf8
+from tornado.escape import native_str, parse_qs_bytes, to_utf8
 from tornado.log import gen_log
 from tornado.util import ObjectDict, unicode_type
 
@@ -792,7 +792,7 @@ def parse_body_arguments(
             for field in fields:
                 k, sep, v = field.strip().partition("=")
                 if k == "boundary" and v:
-                    parse_multipart_form_data(utf8(v), body, arguments, files)
+                    parse_multipart_form_data(to_utf8(v), body, arguments, files)
                     break
             else:
                 raise ValueError("multipart boundary not found")
@@ -1025,7 +1025,7 @@ def encode_username_password(
         username = unicodedata.normalize("NFC", username)
     if isinstance(password, unicode_type):
         password = unicodedata.normalize("NFC", password)
-    return utf8(username) + b":" + utf8(password)
+    return to_utf8(username) + b":" + to_utf8(password)
 
 
 def doctests():

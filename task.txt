@@ -1,1 +1,1 @@
-Rename the function tornado.escape.utf8 to encode_to_utf8.
+Rename the function tornado.escape.utf8 to to_utf8.

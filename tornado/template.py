@@ -344,7 +344,7 @@ class Template:
             "squeeze": escape.squeeze,
             "linkify": escape.linkify,
             "datetime": datetime,
-            "_tt_utf8": escape.utf8,  # for internal use
+            "_tt_utf8": escape.to_utf8,  # for internal use
             "_tt_string_types": (unicode_type, bytes),
             # __name__ and __loader__ allow the traceback mechanism to find
             # the generated source code.
@@ -694,7 +694,7 @@ class _Text(_Node):
             value = filter_whitespace(self.whitespace, value)
 
         if value:
-            writer.write_line("_tt_append(%r)" % escape.utf8(value), self.line)
+            writer.write_line("_tt_append(%r)" % escape.to_utf8(value), self.line)
 
 
 class ParseError(Exception):

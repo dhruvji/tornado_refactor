@@ -186,7 +186,7 @@ class WSGIContainer:
         status_code = int(status_code_str)
         headers = data["headers"]  # type: List[Tuple[str, str]]
         header_set = {k.lower() for (k, v) in headers}
-        body = escape.utf8(body)
+        body = escape.to_utf8(body)
         if status_code != 304:
             if "content-length" not in header_set:
                 headers.append(("Content-Length", str(len(body))))
@@ -230,7 +230,7 @@ class WSGIContainer:
             "SERVER_PROTOCOL": request.version,
             "wsgi.version": (1, 0),
             "wsgi.url_scheme": request.protocol,
-            "wsgi.input": BytesIO(escape.utf8(request.body)),
+            "wsgi.input": BytesIO(escape.to_utf8(request.body)),
             "wsgi.errors": sys.stderr,
             "wsgi.multithread": self.executor is not dummy_executor,
             "wsgi.multiprocess": True,

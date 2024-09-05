@@ -197,21 +197,21 @@ _UTF8_TYPES = (bytes, type(None))
 
 
 @typing.overload
-def utf8(value: bytes) -> bytes:
+def to_utf8(value: bytes) -> bytes:
     pass
 
 
 @typing.overload
-def utf8(value: str) -> bytes:
+def to_utf8(value: str) -> bytes:
     pass
 
 
 @typing.overload
-def utf8(value: None) -> None:
+def to_utf8(value: None) -> None:
     pass
 
 
-def utf8(value: Union[None, str, bytes]) -> Optional[bytes]:
+def to_utf8(value: Union[None, str, bytes]) -> Optional[bytes]:
     """Converts a string argument to a byte string.
 
     If the argument is already a byte string or None, it is returned unchanged.

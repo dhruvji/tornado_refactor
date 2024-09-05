@@ -91,7 +91,7 @@ from tornado import iostream
 from tornado import locale
 from tornado.log import access_log, app_log, gen_log
 from tornado import template
-from tornado.escape import utf8, _unicode
+from tornado.escape import to_utf8, _unicode
 from tornado.routing import (
     AnyMatches,
     DefaultHostMatches,
@@ -935,7 +935,7 @@ class RequestHandler:
         else:
             assert isinstance(status, int) and 300 <= status <= 399
         self.set_status(status)
-        self.set_header("Location", utf8(url))
+        self.set_header("Location", to_utf8(url))
         self.finish()
 
     def write(self, chunk: Union[str, bytes, dict]) -> None:
@@ -967,7 +967,7 @@ class RequestHandler:
         if isinstance(chunk, dict):
             chunk = escape.json_encode(chunk)
             self.set_header("Content-Type", "application/json; charset=UTF-8")
-        chunk = utf8(chunk)
+        chunk = to_utf8(chunk)
         self._write_buffer.append(chunk)
 
     def render(self, template_name: str, **kwargs: Any) -> "Future[None]":
@@ -997,7 +997,7 @@ class RequestHandler:
         for module in getattr(self, "_active_modules", {}).values():
             embed_part = module.embedded_javascript()
             if embed_part:
-                js_embed.append(utf8(embed_part))
+                js_embed.append(to_utf8(embed_part))
             file_part = module.javascript_files()
             if file_part:
                 if isinstance(file_part, (unicode_type, bytes)):
@@ -1006,7 +1006,7 @@ class RequestHandler:
                     js_files.extend(file_part)
             embed_part = module.embedded_css()
             if embed_part:
-                css_embed.append(utf8(embed_part))
+                css_embed.append(to_utf8(embed_part))
             file_part = module.css_files()
             if file_part:
                 if isinstance(file_part, (unicode_type, bytes)):
@@ -1015,16 +1015,16 @@ class RequestHandler:
                     css_files.extend(file_part)
             head_part = module.html_head()
             if head_part:
-                html_heads.append(utf8(head_part))
+                html_heads.append(to_utf8(head_part))
             body_part = module.html_body()
             if body_part:
-                html_bodies.append(utf8(body_part))
+                html_bodies.append(to_utf8(body_part))
 
         if js_files:
             # Maintain order of JavaScript files given by modules
             js = self.render_linked_js(js_files)
             sloc = html.rindex(b"</body>")
-            html = html[:sloc] + utf8(js) + b"\n" + html[sloc:]
+            html = html[:sloc] + to_utf8(js) + b"\n" + html[sloc:]
         if js_embed:
             js_bytes = self.render_embed_js(js_embed)
             sloc = html.rindex(b"</body>")
@@ -1032,7 +1032,7 @@ class RequestHandler:
         if css_files:
             css = self.render_linked_css(css_files)
             hloc = html.index(b"</head>")
-            html = html[:hloc] + utf8(css) + b"\n" + html[hloc:]
+            html = html[:hloc] + to_utf8(css) + b"\n" + html[hloc:]
         if css_embed:
             css_bytes = self.render_embed_css(css_embed)
             hloc = html.index(b"</head>")
@@ -1541,7 +1541,7 @@ class RequestHandler:
                         b"2",
                         binascii.b2a_hex(mask),
                         binascii.b2a_hex(_websocket_mask(mask, token)),
-                        utf8(str(int(timestamp))),
+                        to_utf8(str(int(timestamp))),
                     ]
                 )
             else:
@@ -1588,15 +1588,15 @@ class RequestHandler:
         """
 
         try:
-            m = _signed_value_version_re.match(utf8(cookie))
+            m = _signed_value_version_re.match(to_utf8(cookie))
 
             if m:
                 version = int(m.group(1))
                 if version == 2:
                     _, mask_str, masked_token, timestamp_str = cookie.split("|")
 
-                    mask = binascii.a2b_hex(utf8(mask_str))
-                    token = _websocket_mask(mask, binascii.a2b_hex(utf8(masked_token)))
+                    mask = binascii.a2b_hex(to_utf8(mask_str))
+                    token = _websocket_mask(mask, binascii.a2b_hex(to_utf8(masked_token)))
                     timestamp = int(timestamp_str)
                     return version, token, timestamp
                 else:
@@ -1605,9 +1605,9 @@ class RequestHandler:
             else:
                 version = 1
                 try:
-                    token = binascii.a2b_hex(utf8(cookie))
+                    token = binascii.a2b_hex(to_utf8(cookie))
                 except (binascii.Error, TypeError):
-                    token = utf8(cookie)
+                    token = to_utf8(cookie)
                 # We don't have a usable timestamp in older versions.
                 timestamp = int(time.time())
                 return (version, token, timestamp)
@@ -1651,7 +1651,7 @@ class RequestHandler:
         _, expected_token, _ = self._get_raw_xsrf_token()
         if not token:
             raise HTTPError(403, "'_xsrf' argument has invalid format")
-        if not hmac.compare_digest(utf8(token), utf8(expected_token)):
+        if not hmac.compare_digest(to_utf8(token), to_utf8(expected_token)):
             raise HTTPError(403, "XSRF cookie does not match POST argument")
 
     def xsrf_form_html(self) -> str:
@@ -1764,11 +1764,11 @@ class RequestHandler:
         before completing the request.  The ``Etag`` header should be set
         (perhaps with `set_etag_header`) before calling this method.
         """
-        computed_etag = utf8(self._headers.get("Etag", ""))
+        computed_etag = to_utf8(self._headers.get("Etag", ""))
         # Find all weak and strong etag values from If-None-Match header
         # because RFC 7232 allows multiple etag values in a single header.
         etags = re.findall(
-            rb'\*|(?:W/)?"[^"]*"', utf8(self.request.headers.get("If-None-Match", ""))
+            rb'\*|(?:W/)?"[^"]*"', to_utf8(self.request.headers.get("If-None-Match", ""))
         )
         if not computed_etag or not etags:
             return False
@@ -3528,8 +3528,8 @@ def create_signed_value(
     if clock is None:
         clock = time.time
 
-    timestamp = utf8(str(int(clock())))
-    value = base64.b64encode(utf8(value))
+    timestamp = to_utf8(str(int(clock())))
+    value = base64.b64encode(to_utf8(value))
     if version == 1:
         assert not isinstance(secret, dict)
         signature = _create_signature_v1(secret, name, value, timestamp)
@@ -3551,7 +3551,7 @@ def create_signed_value(
         # - value (base64-encoded)
         # - signature (hex-encoded; no length prefix)
         def format_field(s: Union[str, bytes]) -> bytes:
-            return utf8("%d:" % len(s)) + utf8(s)
+            return to_utf8("%d:" % len(s)) + to_utf8(s)
 
         to_sign = b"|".join(
             [
@@ -3622,7 +3622,7 @@ def decode_signed_value(
     if not value:
         return None
 
-    value = utf8(value)
+    value = to_utf8(value)
     version = _get_version(value)
 
     if version < min_version:
@@ -3643,7 +3643,7 @@ def _decode_signed_value_v1(
     max_age_days: float,
     clock: Callable[[], float],
 ) -> Optional[bytes]:
-    parts = utf8(value).split(b"|")
+    parts = to_utf8(value).split(b"|")
     if len(parts) != 3:
         return None
     signature = _create_signature_v1(secret, name, parts[0], parts[1])
@@ -3719,7 +3719,7 @@ def _decode_signed_value_v2(
     expected_sig = _create_signature_v2(secret, signed_string)
     if not hmac.compare_digest(passed_sig, expected_sig):
         return None
-    if name_field != utf8(name):
+    if name_field != to_utf8(name):
         return None
     timestamp = int(timestamp_bytes)
     if timestamp < clock() - max_age_days * 86400:
@@ -3732,7 +3732,7 @@ def _decode_signed_value_v2(
 
 
 def get_signature_key_version(value: Union[str, bytes]) -> Optional[int]:
-    value = utf8(value)
+    value = to_utf8(value)
     version = _get_version(value)
     if version < 2:
         return None
@@ -3745,16 +3745,16 @@ def get_signature_key_version(value: Union[str, bytes]) -> Optional[int]:
 
 
 def _create_signature_v1(secret: Union[str, bytes], *parts: Union[str, bytes]) -> bytes:
-    hash = hmac.new(utf8(secret), digestmod=hashlib.sha1)
+    hash = hmac.new(to_utf8(secret), digestmod=hashlib.sha1)
     for part in parts:
-        hash.update(utf8(part))
-    return utf8(hash.hexdigest())
+        hash.update(to_utf8(part))
+    return to_utf8(hash.hexdigest())
 
 
 def _create_signature_v2(secret: Union[str, bytes], s: bytes) -> bytes:
-    hash = hmac.new(utf8(secret), digestmod=hashlib.sha256)
-    hash.update(utf8(s))
-    return utf8(hash.hexdigest())
+    hash = hmac.new(to_utf8(secret), digestmod=hashlib.sha256)
+    hash.update(to_utf8(s))
+    return to_utf8(hash.hexdigest())
 
 
 def is_absolute(path: str) -> bool:

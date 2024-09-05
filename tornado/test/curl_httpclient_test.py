@@ -1,7 +1,7 @@
 from hashlib import md5
 import unittest
 
-from tornado.escape import utf8
+from tornado.escape import to_utf8
 from tornado.testing import AsyncHTTPTestCase
 from tornado.test import httpclient_test
 from tornado.web import Application, RequestHandler
@@ -51,9 +51,9 @@ class DigestAuthHandler(RequestHandler):
             assert param_dict["nonce"] == nonce
             assert param_dict["username"] == self.username
             assert param_dict["uri"] == self.request.path
-            h1 = md5(utf8(f"{self.username}:{realm}:{self.password}")).hexdigest()
-            h2 = md5(utf8(f"{self.request.method}:{self.request.path}")).hexdigest()
-            digest = md5(utf8(f"{h1}:{nonce}:{h2}")).hexdigest()
+            h1 = md5(to_utf8(f"{self.username}:{realm}:{self.password}")).hexdigest()
+            h2 = md5(to_utf8(f"{self.request.method}:{self.request.path}")).hexdigest()
+            digest = md5(to_utf8(f"{h1}:{nonce}:{h2}")).hexdigest()
             if digest == param_dict["response"]:
                 self.write("ok")
             else:

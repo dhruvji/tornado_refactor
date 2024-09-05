@@ -5,7 +5,7 @@ import tempfile
 import unittest
 
 import tornado.locale
-from tornado.escape import utf8, to_unicode
+from tornado.escape import to_utf8, to_unicode
 from tornado.util import unicode_type
 
 
@@ -80,7 +80,7 @@ class LocaleDataTest(unittest.TestCase):
         name = tornado.locale.LOCALE_NAMES["es_LA"]["name"]
         self.assertTrue(isinstance(name, unicode_type))
         self.assertEqual(name, "Espa\u00f1ol")
-        self.assertEqual(utf8(name), b"Espa\xc3\xb1ol")
+        self.assertEqual(to_utf8(name), b"Espa\xc3\xb1ol")
 
 
 class EnglishTest(unittest.TestCase):

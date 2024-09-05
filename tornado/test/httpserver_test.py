@@ -2,7 +2,7 @@ from tornado import gen, netutil
 from tornado.escape import (
     json_decode,
     json_encode,
-    utf8,
+    to_utf8,
     _unicode,
     recursive_unicode,
     native_str,
@@ -211,7 +211,7 @@ class HTTPConnectionTest(AsyncHTTPTestCase):
                 lambda: stream.connect(("127.0.0.1", self.get_http_port()))
             )
             stream.write(
-                newline.join(headers + [utf8("Content-Length: %d" % len(body))])
+                newline.join(headers + [to_utf8("Content-Length: %d" % len(body))])
                 + newline
                 + newline
                 + body
@@ -620,7 +620,7 @@ ok
                 ):
                     yield stream.connect(("127.0.0.1", self.get_http_port()))
                     stream.write(
-                        utf8(
+                        to_utf8(
                             textwrap.dedent(
                                 f"""\
                             POST /echo HTTP/1.1
@@ -1058,7 +1058,7 @@ class GzipBaseTest(AsyncHTTPTestCase):
     def post_gzip(self, body):
         bytesio = BytesIO()
         gzip_file = gzip.GzipFile(mode="w", fileobj=bytesio)
-        gzip_file.write(utf8(body))
+        gzip_file.write(to_utf8(body))
         gzip_file.close()
         compressed_body = bytesio.getvalue()
         return self.fetch(
@@ -1085,7 +1085,7 @@ class GzipTest(GzipBaseTest, AsyncHTTPTestCase):
         # https://datatracker.ietf.org/doc/html/rfc7231#section-3.1.2.1
         bytesio = BytesIO()
         gzip_file = gzip.GzipFile(mode="w", fileobj=bytesio)
-        gzip_file.write(utf8("foo=bar"))
+        gzip_file.write(to_utf8("foo=bar"))
         gzip_file.close()
         compressed_body = bytesio.getvalue()
         response = self.fetch(
@@ -1131,7 +1131,7 @@ class StreamingChunkSizeTest(AsyncHTTPTestCase):
             self.chunk_lengths.append(len(chunk))
 
         def finish(self):
-            response_body = utf8(json_encode(self.chunk_lengths))
+            response_body = to_utf8(json_encode(self.chunk_lengths))
             self.connection.write_headers(
                 ResponseStartLine("HTTP/1.1", 200, "OK"),
                 HTTPHeaders({"Content-Length": str(len(response_body))}),
@@ -1460,7 +1460,7 @@ class LegacyInterfaceTest(AsyncHTTPTestCase):
                 return
             message = b"Hello world"
             request.connection.write(
-                utf8("HTTP/1.1 200 OK\r\n" "Content-Length: %d\r\n\r\n" % len(message))
+                to_utf8("HTTP/1.1 200 OK\r\n" "Content-Length: %d\r\n\r\n" % len(message))
             )
             request.connection.write(message)
             request.connection.finish()

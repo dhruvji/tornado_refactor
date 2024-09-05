@@ -23,7 +23,7 @@ import tempfile
 import unittest
 import warnings
 
-from tornado.escape import utf8
+from tornado.escape import to_utf8
 from tornado.log import LogFormatter, define_logging_options, enable_pretty_logging
 from tornado.options import OptionParser
 from tornado.util import basestring_type
@@ -85,7 +85,7 @@ class LogFormatterTest(unittest.TestCase):
         with ignore_bytes_warning():
             # This will be "\xe9" on python 2 or "b'\xe9'" on python 3
             self.logger.error(b"\xe9")
-            self.assertEqual(self.get_output(), utf8(repr(b"\xe9")))
+            self.assertEqual(self.get_output(), to_utf8(repr(b"\xe9")))
 
     def test_utf8_logging(self):
         with ignore_bytes_warning():
@@ -93,12 +93,12 @@ class LogFormatterTest(unittest.TestCase):
         if issubclass(bytes, basestring_type):
             # on python 2, utf8 byte strings (and by extension ascii byte
             # strings) are passed through as-is.
-            self.assertEqual(self.get_output(), utf8("\u00e9"))
+            self.assertEqual(self.get_output(), to_utf8("\u00e9"))
         else:
             # on python 3, byte strings always get repr'd even if
             # they're ascii-only, so this degenerates into another
             # copy of test_bytes_logging.
-            self.assertEqual(self.get_output(), utf8(repr(utf8("\u00e9"))))
+            self.assertEqual(self.get_output(), to_utf8(repr(to_utf8("\u00e9"))))
 
     def test_bytes_exception_logging(self):
         try:
@@ -114,7 +114,7 @@ class LogFormatterTest(unittest.TestCase):
 
     def test_unicode_logging(self):
         self.logger.error("\u00e9")
-        self.assertEqual(self.get_output(), utf8("\u00e9"))
+        self.assertEqual(self.get_output(), to_utf8("\u00e9"))
 
 
 class EnablePrettyLoggingTest(unittest.TestCase):

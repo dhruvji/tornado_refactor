@@ -5,7 +5,7 @@ import textwrap
 import unittest
 
 import tornado
-from tornado.escape import utf8
+from tornado.escape import to_utf8
 from tornado.util import (
     raise_exc_info,
     Configurable,
@@ -209,7 +209,7 @@ class ConfigurableTest(unittest.TestCase):
 
 class UnicodeLiteralTest(unittest.TestCase):
     def test_unicode_escapes(self):
-        self.assertEqual(utf8("\u00e9"), b"\xc3\xa9")
+        self.assertEqual(to_utf8("\u00e9"), b"\xc3\xa9")
 
 
 class ExecInTest(unittest.TestCase):
@@ -287,10 +287,10 @@ class TimedeltaToSecondsTest(unittest.TestCase):
 
 class ImportObjectTest(unittest.TestCase):
     def test_import_member(self):
-        self.assertIs(import_object("tornado.escape.utf8"), utf8)
+        self.assertIs(import_object("tornado.escape.utf8"), to_utf8)
 
     def test_import_member_unicode(self):
-        self.assertIs(import_object("tornado.escape.utf8"), utf8)
+        self.assertIs(import_object("tornado.escape.utf8"), to_utf8)
 
     def test_import_module(self):
         self.assertIs(import_object("tornado.escape"), tornado.escape)

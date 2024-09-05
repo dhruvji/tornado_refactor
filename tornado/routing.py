@@ -180,7 +180,7 @@ from functools import partial
 
 from tornado import httputil
 from tornado.httpserver import _CallableAdapter
-from tornado.escape import url_escape, url_unescape, utf8
+from tornado.escape import url_escape, url_unescape, to_utf8
 from tornado.log import app_log
 from tornado.util import basestring_type, import_object, re_unescape, unicode_type
 
@@ -602,7 +602,7 @@ class PathMatches(Matcher):
         for a in args:
             if not isinstance(a, (unicode_type, bytes)):
                 a = str(a)
-            converted_args.append(url_escape(utf8(a), plus=False))
+            converted_args.append(url_escape(to_utf8(a), plus=False))
         return self._path % tuple(converted_args)
 
     def _find_groups(self) -> Tuple[Optional[str], Optional[int]]:

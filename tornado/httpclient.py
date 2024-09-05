@@ -48,7 +48,7 @@ from tornado.concurrent import (
     future_set_result_unless_cancelled,
     future_set_exception_unless_cancelled,
 )
-from tornado.escape import utf8, native_str
+from tornado.escape import to_utf8, native_str
 from tornado import gen, httputil
 from tornado.ioloop import IOLoop
 from tornado.util import Configurable
@@ -568,7 +568,7 @@ class HTTPRequest:
 
     @body.setter
     def body(self, value: Union[bytes, str]) -> None:
-        self._body = utf8(value)
+        self._body = to_utf8(value)
 
 
 class HTTPResponse:

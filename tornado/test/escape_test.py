@@ -2,7 +2,7 @@ import unittest
 
 import tornado
 from tornado.escape import (
-    utf8,
+    to_utf8,
     xhtml_escape,
     xhtml_unescape,
     url_escape,
@@ -228,8 +228,8 @@ class EscapeTestCase(unittest.TestCase):
             (b"<\xc3\xa9>", b"&lt;\xc3\xa9&gt;"),
         ]  # type: List[Tuple[Union[str, bytes], Union[str, bytes]]]
         for unescaped, escaped in tests:
-            self.assertEqual(utf8(xhtml_escape(unescaped)), utf8(escaped))
-            self.assertEqual(utf8(unescaped), utf8(xhtml_unescape(escaped)))
+            self.assertEqual(to_utf8(xhtml_escape(unescaped)), to_utf8(escaped))
+            self.assertEqual(to_utf8(unescaped), to_utf8(xhtml_unescape(escaped)))
 
     def test_xhtml_unescape_numeric(self):
         tests = [
@@ -259,14 +259,14 @@ class EscapeTestCase(unittest.TestCase):
         tests = [
             ("%C3%A9", "\u00e9", "utf8"),
             ("%C3%A9", "\u00c3\u00a9", "latin1"),
-            ("%C3%A9", utf8("\u00e9"), None),
+            ("%C3%A9", to_utf8("\u00e9"), None),
         ]
         for escaped, unescaped, encoding in tests:
             # input strings to url_unescape should only contain ascii
             # characters, but make sure the function accepts both byte
             # and unicode strings.
             self.assertEqual(url_unescape(to_unicode(escaped), encoding), unescaped)
-            self.assertEqual(url_unescape(utf8(escaped), encoding), unescaped)
+            self.assertEqual(url_unescape(to_utf8(escaped), encoding), unescaped)
 
     def test_url_escape_quote_plus(self):
         unescaped = "+ #%"
@@ -276,9 +276,9 @@ class EscapeTestCase(unittest.TestCase):
         self.assertEqual(url_escape(unescaped, plus=False), escaped)
         self.assertEqual(url_unescape(plus_escaped), unescaped)
         self.assertEqual(url_unescape(escaped, plus=False), unescaped)
-        self.assertEqual(url_unescape(plus_escaped, encoding=None), utf8(unescaped))
+        self.assertEqual(url_unescape(plus_escaped, encoding=None), to_utf8(unescaped))
         self.assertEqual(
-            url_unescape(escaped, encoding=None, plus=False), utf8(unescaped)
+            url_unescape(escaped, encoding=None, plus=False), to_utf8(unescaped)
         )
 
     def test_escape_return_types(self):
@@ -294,7 +294,7 @@ class EscapeTestCase(unittest.TestCase):
         self.assertEqual(json_decode('"foo"'), "foo")
 
         # Non-ascii bytes are interpreted as utf8
-        self.assertEqual(json_decode(utf8('"\u00e9"')), "\u00e9")
+        self.assertEqual(json_decode(to_utf8('"\u00e9"')), "\u00e9")
 
     def test_json_encode(self):
         # json deals with strings, not bytes.  On python 2 byte strings will
@@ -302,7 +302,7 @@ class EscapeTestCase(unittest.TestCase):
         # are not allowed.
         self.assertEqual(json_decode(json_encode("\u00e9")), "\u00e9")
         if bytes is str:
-            self.assertEqual(json_decode(json_encode(utf8("\u00e9"))), "\u00e9")
+            self.assertEqual(json_decode(json_encode(to_utf8("\u00e9"))), "\u00e9")
             self.assertRaises(UnicodeDecodeError, json_encode, b"\xe9")
 
     def test_squeeze(self):

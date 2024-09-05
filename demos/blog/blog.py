@@ -232,7 +232,7 @@ class AuthCreateHandler(BaseHandler):
         hashed_password = await tornado.ioloop.IOLoop.current().run_in_executor(
             None,
             bcrypt.hashpw,
-            tornado.escape.utf8(self.get_argument("password")),
+            tornado.escape.to_utf8(self.get_argument("password")),
             bcrypt.gensalt(),
         )
         author = await self.queryone(
@@ -265,8 +265,8 @@ class AuthLoginHandler(BaseHandler):
         password_equal = await tornado.ioloop.IOLoop.current().run_in_executor(
             None,
             bcrypt.checkpw,
-            tornado.escape.utf8(self.get_argument("password")),
-            tornado.escape.utf8(author.hashed_password),
+            tornado.escape.to_utf8(self.get_argument("password")),
+            tornado.escape.to_utf8(author.hashed_password),
         )
         if password_equal:
             self.set_signed_cookie("blogdemo_user", str(author.id))

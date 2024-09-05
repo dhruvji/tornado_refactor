@@ -27,7 +27,7 @@ from io import BytesIO
 from tornado import httputil
 from tornado import ioloop
 
-from tornado.escape import utf8, native_str
+from tornado.escape import to_utf8, native_str
 from tornado.httpclient import (
     HTTPRequest,
     HTTPResponse,
@@ -482,7 +482,7 @@ class CurlAsyncHTTPClient(AsyncHTTPClient):
                 # forbid clients from sending a body, it arguably
                 # disallows the server from doing anything with them.
                 raise ValueError("Body must be None for GET request")
-            request_buffer = BytesIO(utf8(request.body or ""))
+            request_buffer = BytesIO(to_utf8(request.body or ""))
 
             def ioctl(cmd: int) -> None:
                 if cmd == curl.IOCMD_RESTARTREAD:  # type: ignore

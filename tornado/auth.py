@@ -369,14 +369,14 @@ class OAuthMixin:
            awaitable object instead.
         """
         handler = cast(RequestHandler, self)
-        request_key = escape.utf8(handler.get_argument("oauth_token"))
+        request_key = escape.to_utf8(handler.get_argument("oauth_token"))
         oauth_verifier = handler.get_argument("oauth_verifier", None)
         request_cookie = handler.get_cookie("_oauth_request_token")
         if not request_cookie:
             raise AuthError("Missing OAuth request token cookie")
         handler.clear_cookie("_oauth_request_token")
         cookie_key, cookie_secret = (
-            base64.b64decode(escape.utf8(i)) for i in request_cookie.split("|")
+            base64.b64decode(escape.to_utf8(i)) for i in request_cookie.split("|")
         )
         if cookie_key != request_key:
             raise AuthError("Request token does not match cookie")
@@ -436,9 +436,9 @@ class OAuthMixin:
         handler = cast(RequestHandler, self)
         request_token = _oauth_parse_response(response.body)
         data = (
-            base64.b64encode(escape.utf8(request_token["key"]))
+            base64.b64encode(escape.to_utf8(request_token["key"]))
             + b"|"
-            + base64.b64encode(escape.utf8(request_token["secret"]))
+            + base64.b64encode(escape.to_utf8(request_token["secret"]))
         )
         handler.set_cookie("_oauth_request_token", data)
         args = dict(oauth_token=request_token["key"])
@@ -1174,11 +1174,11 @@ def _oauth_signature(
     )
     base_string = "&".join(_oauth_escape(e) for e in base_elems)
 
-    key_elems = [escape.utf8(consumer_token["secret"])]
-    key_elems.append(escape.utf8(token["secret"] if token else ""))
+    key_elems = [escape.to_utf8(consumer_token["secret"])]
+    key_elems.append(escape.to_utf8(token["secret"] if token else ""))
     key = b"&".join(key_elems)
 
-    hash = hmac.new(key, escape.utf8(base_string), hashlib.sha1)
+    hash = hmac.new(key, escape.to_utf8(base_string), hashlib.sha1)
     return binascii.b2a_base64(hash.digest())[:-1]
 
 
@@ -1205,13 +1205,13 @@ def _oauth10a_signature(
     )
 
     base_string = "&".join(_oauth_escape(e) for e in base_elems)
-    key_elems = [escape.utf8(urllib.parse.quote(consumer_token["secret"], safe="~"))]
+    key_elems = [escape.to_utf8(urllib.parse.quote(consumer_token["secret"], safe="~"))]
     key_elems.append(
-        escape.utf8(urllib.parse.quote(token["secret"], safe="~") if token else "")
+        escape.to_utf8(urllib.parse.quote(token["secret"], safe="~") if token else "")
     )
     key = b"&".join(key_elems)
 
-    hash = hmac.new(key, escape.utf8(base_string), hashlib.sha1)
+    hash = hmac.new(key, escape.to_utf8(base_string), hashlib.sha1)
     return binascii.b2a_base64(hash.digest())[:-1]
 
 

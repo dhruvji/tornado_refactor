@@ -10,7 +10,7 @@ from tornado.httputil import (
     HTTPInputError,
     HTTPFile,
 )
-from tornado.escape import utf8, native_str
+from tornado.escape import to_utf8, native_str
 from tornado.log import gen_log
 from tornado.testing import ExpectLog
 from tornado.test.util import ignore_deprecation
@@ -149,7 +149,7 @@ Foo
             ).replace(
                 '"', '\\"'
             )
-            data = utf8(str_data.replace("\n", "\r\n"))
+            data = to_utf8(str_data.replace("\n", "\r\n"))
             args, files = form_data_args()
             parse_multipart_form_data(b"1234", data, args, files)
             file = files["files"][0]

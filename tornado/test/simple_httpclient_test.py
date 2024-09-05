@@ -9,7 +9,7 @@ import ssl
 import sys
 import typing  # noqa: F401
 
-from tornado.escape import to_unicode, utf8
+from tornado.escape import to_unicode, to_utf8
 from tornado import gen, version
 from tornado.httpclient import AsyncHTTPClient, HTTPResponse
 from tornado.httpserver import HTTPServer
@@ -77,7 +77,7 @@ class ContentLengthHandler(RequestHandler):
     @gen.coroutine
     def write_response(self):
         yield self.stream.write(
-            utf8(
+            to_utf8(
                 "HTTP/1.0 200 OK\r\nContent-Length: %s\r\n\r\nok"
                 % self.get_argument("value")
             )
