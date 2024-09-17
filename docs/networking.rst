@@ -7,4 +7,5 @@ Asynchronous networking
    iostream
    netutil
    tcpclient
+   tcpclientconfig
    tcpserver
