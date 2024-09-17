@@ -23,12 +23,12 @@ that options may be defined in any module (it also enables
 module, so feel free to use `argparse` or other configuration
 libraries if you prefer them.
 
-Options must be defined with `tornado.options.define` before use,
+Options must be defined with `tornado.global_options.define` before use,
 generally at the top level of a module. The options are then
-accessible as attributes of `tornado.options.options`::
+accessible as attributes of `tornado.global_options.options`::
 
     # myapp/db.py
-    from tornado.options import define, options
+    from tornado.global_options import define, options
 
     define("mysql_host", default="127.0.0.1:3306", help="Main user DB")
     define("memcache_hosts", default="127.0.0.1:11011", multiple=True,
@@ -39,7 +39,7 @@ accessible as attributes of `tornado.options.options`::
         ...
 
     # myapp/server.py
-    from tornado.options import define, options
+    from tornado.global_options import define, options
 
     define("port", default=8080, help="port to listen on")
 
@@ -59,9 +59,9 @@ either `parse_command_line` or `parse_config_file`::
     import tornado
 
     if __name__ == '__main__':
-        tornado.options.parse_command_line()
+        tornado.global_options.parse_command_line()
         # or
-        tornado.options.parse_config_file("/etc/server.conf")
+        tornado.global_options.parse_config_file("/etc/server.conf")
 
 .. note::
 
@@ -69,7 +69,7 @@ either `parse_command_line` or `parse_config_file`::
    but the last one, or side effects may occur twice (in particular,
    this can result in log messages being doubled).
 
-`tornado.options.options` is a singleton instance of `OptionParser`, and
+`tornado.global_options.options` is a singleton instance of `OptionParser`, and
 the top-level functions in this module (`define`, `parse_command_line`, etc)
 simply call methods on it.  You may create additional `OptionParser`
 instances to define isolated sets of options, such as for subcommands.
@@ -82,7 +82,7 @@ instances to define isolated sets of options, such as for subcommands.
    alone so you can manage it yourself, either pass ``--logging=none``
    on the command line or do the following to disable it in code::
 
-       from tornado.options import options, parse_command_line
+       from tornado.global_options import options, parse_command_line
        options.logging = None
        parse_command_line()
 
@@ -132,7 +132,7 @@ class Error(Exception):
 class OptionParser:
     """A collection of options, a dictionary with object-like access.
 
-    Normally accessed via static functions in the `tornado.options` module,
+    Normally accessed via static functions in the `tornado.global_options` module,
     which reference a global instance.
     """
 
@@ -194,7 +194,7 @@ class OptionParser:
 
         Useful for copying options into Application settings::
 
-            from tornado.options import define, parse_command_line, options
+            from tornado.global_options import define, parse_command_line, options
 
             define('template_path', group='application')
             define('static_path', group='application')
@@ -394,7 +394,7 @@ class OptionParser:
 
         .. note::
 
-            `tornado.options` is primarily a command-line library.
+            `tornado.global_options` is primarily a command-line library.
             Config file support is provided for applications that wish
             to use it, but applications that prefer config files may
             wish to look at other libraries instead.

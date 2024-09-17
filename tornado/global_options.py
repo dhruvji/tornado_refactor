@@ -23,12 +23,12 @@ that options may be defined in any module (it also enables
 module, so feel free to use `argparse` or other configuration
 libraries if you prefer them.
 
-Options must be defined with `tornado.options.define` before use,
+Options must be defined with `define` before use,
 generally at the top level of a module. The options are then
-accessible as attributes of `tornado.options.options`::
+accessible as attributes of `options`::
 
     # myapp/db.py
-    from tornado.options import define, options
+    from tornado.global_options import define, options
 
     define("mysql_host", default="127.0.0.1:3306", help="Main user DB")
     define("memcache_hosts", default="127.0.0.1:11011", multiple=True,
@@ -39,7 +39,7 @@ accessible as attributes of `tornado.options.options`::
         ...
 
     # myapp/server.py
-    from tornado.options import define, options
+    from tornado.global_options import define, options
 
     define("port", default=8080, help="port to listen on")
 
@@ -59,9 +59,9 @@ either `parse_command_line` or `parse_config_file`::
     import tornado
 
     if __name__ == '__main__':
-        tornado.options.parse_command_line()
+        tornado.global_options.parse_command_line()
         # or
-        tornado.options.parse_config_file("/etc/server.conf")
+        tornado.global_options.parse_config_file("/etc/server.conf")
 
 .. note::
 
@@ -69,9 +69,9 @@ either `parse_command_line` or `parse_config_file`::
    but the last one, or side effects may occur twice (in particular,
    this can result in log messages being doubled).
 
-`tornado.options.options` is a singleton instance of `OptionParser`, and
+`options` is a singleton instance of `tornado.options.OptionParser`, and
 the top-level functions in this module (`define`, `parse_command_line`, etc)
-simply call methods on it.  You may create additional `OptionParser`
+simply call methods on it.  You may create additional `tornado.options.OptionParser`
 instances to define isolated sets of options, such as for subcommands.
 
 .. note::
@@ -82,7 +82,7 @@ instances to define isolated sets of options, such as for subcommands.
    alone so you can manage it yourself, either pass ``--logging=none``
    on the command line or do the following to disable it in code::
 
-       from tornado.options import options, parse_command_line
+       from tornado.global_options import options, parse_command_line
        options.logging = None
        parse_command_line()
 
@@ -129,7 +129,7 @@ def define(
 ) -> None:
     """Defines an option in the global namespace.
 
-    See `OptionParser.define`.
+    See `tornado.options.OptionParser.define`.
     """
     return options.define(
         name,
@@ -148,7 +148,7 @@ def parse_command_line(
 ) -> List[str]:
     """Parses global options from the command line.
 
-    See `OptionParser.parse_command_line`.
+    See `tornado.options.OptionParser.parse_command_line`.
     """
     return options.parse_command_line(args, final=final)
 
@@ -156,7 +156,7 @@ def parse_command_line(
 def parse_config_file(path: str, final: bool = True) -> None:
     """Parses global options from a config file.
 
-    See `OptionParser.parse_config_file`.
+    See `tornado.options.OptionParser.parse_config_file`.
     """
     return options.parse_config_file(path, final=final)
 
@@ -164,7 +164,7 @@ def parse_config_file(path: str, final: bool = True) -> None:
 def print_help(file: Optional[TextIO] = None) -> None:
     """Prints all the command line options to stderr (or another file).
 
-    See `OptionParser.print_help`.
+    See `tornado.options.OptionParser.print_help`.
     """
     return options.print_help(file)
 
@@ -172,7 +172,7 @@ def print_help(file: Optional[TextIO] = None) -> None:
 def add_parse_callback(callback: Callable[[], None]) -> None:
     """Adds a parse callback, to be invoked when option parsing is done.
 
-    See `OptionParser.add_parse_callback`
+    See `tornado.options.OptionParser.add_parse_callback`
     """
     options.add_parse_callback(callback)
 

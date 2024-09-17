@@ -88,7 +88,7 @@ class LogFormatter(logging.Formatter):
     * Robust against str/bytes encoding problems.
 
     This formatter is enabled automatically by
-    `tornado.options.parse_command_line` or `tornado.options.parse_config_file`
+    `tornado.global_options.parse_command_line` or `tornado.global_options.parse_config_file`
     (unless ``--logging=none`` is used).
 
     Color support on Windows versions that do not support ANSI color codes is
@@ -217,13 +217,13 @@ def enable_pretty_logging(
 ) -> None:
     """Turns on formatted logging output as configured.
 
-    This is called automatically by `tornado.options.parse_command_line`
-    and `tornado.options.parse_config_file`.
+    This is called automatically by `tornado.global_options.parse_command_line`
+    and `tornado.global_options.parse_config_file`.
     """
     if options is None:
-        import tornado.options
+        import tornado.global_options
 
-        options = tornado.options.options
+        options = tornado.global_options.options
     if options.logging is None or options.logging.lower() == "none":
         return
     if logger is None:
@@ -273,9 +273,9 @@ def define_logging_options(options: Any = None) -> None:
     """
     if options is None:
         # late import to prevent cycle
-        import tornado.options
+        import tornado.global_options
 
-        options = tornado.options.options
+        options = tornado.global_options.options
     options.define(
         "logging",
         default="info",
